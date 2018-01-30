@@ -8,7 +8,7 @@ DApp = {
     wallets: {},
 
     // set to true to use with local blockchain
-    development: true,
+    development: false,
     //Rinkeby:
     factoryAddress: "0xe47684d658872fbde11c82036099a12c066c4fa3",
     tokenAddress: "0x86b32525e687500ed4a665d1b16fef526cdd6f10",
@@ -53,18 +53,18 @@ DApp = {
      *  TODO: Rewrite to use promises.
      */
     initContract: function(){
-        $.getJSON('../contracts/TimeLockedWalletFactory.json', function(factoryContract){
+        $.getJSON('contracts/TimeLockedWalletFactory.json', function(factoryContract){
             DApp.factoryContract = TruffleContract(factoryContract);
             DApp.factoryContract.setProvider(DApp.web3Provider);
             console.log("[x] TimeLockedWalletFactory contract initialized.");
 
             //hardcoding ToptalToken for simplicity
-            $.getJSON('../contracts/ToptalToken.json', function(toptalTokenContract){
+            $.getJSON('contracts/ToptalToken.json', function(toptalTokenContract){
                 DApp.toptalTokenContract = TruffleContract(toptalTokenContract);
                 DApp.toptalTokenContract.setProvider(DApp.web3Provider);
                 console.log("[x] ToptalToken contract initialized.");
 
-                $.getJSON('../contracts/TimeLockedWallet.json', function(walletContract){
+                $.getJSON('contracts/TimeLockedWallet.json', function(walletContract){
                     DApp.walletContract = TruffleContract(walletContract)
                     DApp.walletContract.setProvider(DApp.web3Provider);
                     console.log("[x] TimeLockedWallet contract initialized.");
