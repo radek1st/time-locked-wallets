@@ -1,3 +1,3 @@
 # Time Locked Wallets
 
-Details on this project will be published as [here](BLOG.md)
+Details on this project will be published [here](BLOG.md)
