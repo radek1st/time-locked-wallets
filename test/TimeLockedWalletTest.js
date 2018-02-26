@@ -57,7 +57,7 @@ contract('TimeLockedWallet', (accounts) => {
         assert(ethToSend == await web3.eth.getBalance(timeLockedWallet.address));
     });
 
-    it("Other then owner cannot withdraw funds after the unlock date", async () => {
+    it("Nobody other than the owner can withdraw funds after the unlock date", async () => {
         //set unlock date in unix epoch to now
         let now = Math.floor((new Date).getTime() / 1000);
 
@@ -106,7 +106,7 @@ contract('TimeLockedWallet', (accounts) => {
         assert(balance.toNumber() == amountOfTokens);
     });
 
-    it("Allow to get info about wallet", async () => {
+    it("Allow getting info about the wallet", async () => {
         // Remember current time.
         let now = Math.floor((new Date).getTime() / 1000);
         // Set unlockDate to future time.
