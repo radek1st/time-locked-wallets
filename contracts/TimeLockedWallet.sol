@@ -6,8 +6,8 @@ contract TimeLockedWallet {
 
     address public creator;
     address public owner;
-    uint public unlockDate;
-    uint public createdAt;
+    uint256 public unlockDate;
+    uint256 public createdAt;
 
     modifier onlyOwner {
         require(msg.sender == owner);
@@ -17,7 +17,7 @@ contract TimeLockedWallet {
     function TimeLockedWallet(
         address _creator,
         address _owner,
-        uint _unlockDate
+        uint256 _unlockDate
     ) public {
         creator = _creator;
         owner = _owner;
@@ -43,16 +43,16 @@ contract TimeLockedWallet {
        require(now >= unlockDate);
        ERC20 token = ERC20(_tokenContract);
        //now send all the token balance
-       uint tokenBalance = token.balanceOf(this);
+       uint256 tokenBalance = token.balanceOf(this);
        token.transfer(owner, tokenBalance);
        WithdrewTokens(_tokenContract, msg.sender, tokenBalance);
     }
 
-    function info() public view returns(address, address, uint, uint, uint) {
+    function info() public view returns(address, address, uint256, uint256, uint256) {
         return (creator, owner, unlockDate, createdAt, this.balance);
     }
 
-    event Received(address from, uint amount);
-    event Withdrew(address to, uint amount);
-    event WithdrewTokens(address tokenContract, address to, uint amount);
+    event Received(address from, uint256 amount);
+    event Withdrew(address to, uint256 amount);
+    event WithdrewTokens(address tokenContract, address to, uint256 amount);
 }

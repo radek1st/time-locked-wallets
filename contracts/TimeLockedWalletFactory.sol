@@ -14,7 +14,7 @@ contract TimeLockedWalletFactory {
         return wallets[_user];
     }
 
-    function newTimeLockedWallet(address _owner, uint _unlockDate)
+    function newTimeLockedWallet(address _owner, uint256 _unlockDate)
         payable
         public
         returns(address wallet)
@@ -42,5 +42,5 @@ contract TimeLockedWalletFactory {
         revert();
     }
 
-    event Created(address wallet, address from, address to, uint createdAt, uint unlockDate, uint amount);
+    event Created(address wallet, address from, address to, uint256 createdAt, uint256 unlockDate, uint256 amount);
 }
