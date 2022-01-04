@@ -1,7 +1,7 @@
 const TimeLockedWallet = artifacts.require("./TimeLockedWallet.sol");
 const ToptalToken = artifacts.require("./ToptalToken.sol");
 
-let ethToSend = web3.utils.toWei(String(1), "ether");
+let ethToSend = web3.utils.toWei(String(0.1), "ether");
 let someGas = web3.utils.toWei(String(0.01), "ether");
 let creator;
 let owner;
@@ -22,6 +22,7 @@ contract('TimeLockedWallet', (accounts) => {
         await timeLockedWallet.send(ethToSend, {from: architect});
         assert(ethToSend == await web3.eth.getBalance(timeLockedWallet.address));
         let balanceBefore = await web3.eth.getBalance(owner);
+        
         await timeLockedWallet.withdraw({from: owner});
         let balanceAfter = await web3.eth.getBalance(owner);
         assert(balanceAfter - balanceBefore >= ethToSend - someGas);
@@ -100,7 +101,7 @@ contract('TimeLockedWallet', (accounts) => {
         assert(info[0] == architect);
         assert(info[1] == owner);
         assert(info[2].toNumber() == unlockDate);
-        assert(info[3].toNumber() == now);
+        assert(info[3].toNumber() == now);        
         assert(info[4].toNumber() == ethToSend);
     });
 

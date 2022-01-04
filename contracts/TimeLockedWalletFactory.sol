@@ -1,5 +1,6 @@
 // pragma solidity ^0.4.18;
 pragma solidity  >0.4.23 <0.7.0;
+// pragma solidity ^0.8.0;
 
 import "./TimeLockedWallet.sol";
 
@@ -40,7 +41,7 @@ contract TimeLockedWalletFactory {
     }
 
     // Prevents accidental sending of ether to the factory
-    function () external {
+    function() external {
         revert();
     }
 

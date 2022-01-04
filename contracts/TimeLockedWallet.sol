@@ -1,4 +1,5 @@
 pragma solidity >0.4.23 <0.7.0;
+// pragma solidity ^0.8.0;
 
 import "./ERC20.sol";
 
@@ -26,7 +27,7 @@ contract TimeLockedWallet {
     }
 
     // keep all the ether sent to this address
-    function() payable external { 
+    function() payable external{ 
         emit Received(msg.sender, msg.value);
     }
 

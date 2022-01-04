@@ -16,10 +16,11 @@ contract ToptalToken is ERC20 {
 
   string public name = "Toptal Token";
   string public symbol = "TTT";
-  uint256 public decimals = 6;
+  uint256 public decimals = 1;
 
   constructor() public {
-    totalSupply = 100000 * (10 ** decimals);
+    // totalSupply = 100000 * (10 ** decimals);
+    totalSupply = 10 * (10 ** decimals);
     balances[msg.sender] = totalSupply;
   }
 
