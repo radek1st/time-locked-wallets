@@ -1,15 +1,15 @@
 const TimeLockedWallet = artifacts.require("./TimeLockedWallet.sol");
 const ToptalToken = artifacts.require("./ToptalToken.sol");
 
-let ethToSend = web3.toWei(1, "ether");
-let someGas = web3.toWei(0.01, "ether");
+let ethToSend = web3.utils.toWei(String(1), "ether");
+let someGas = web3.utils.toWei(String(0.01), "ether");
 let creator;
 let owner;
 
 contract('TimeLockedWallet', (accounts) => {
 
     before(async () => {
-        creator = accounts[0];
+        architect = accounts[0];
         owner = accounts[1];
         other = accounts[2];
     });
@@ -18,8 +18,8 @@ contract('TimeLockedWallet', (accounts) => {
         //set unlock date in unix epoch to now
         let now = Math.floor((new Date).getTime() / 1000);
         //create the contract and load the contract with some eth
-        let timeLockedWallet = await TimeLockedWallet.new(creator, owner, now);
-        await timeLockedWallet.send(ethToSend, {from: creator});
+        let timeLockedWallet = await TimeLockedWallet.new(architect, owner, now);
+        await timeLockedWallet.send(ethToSend, {from: architect});
         assert(ethToSend == await web3.eth.getBalance(timeLockedWallet.address));
         let balanceBefore = await web3.eth.getBalance(owner);
         await timeLockedWallet.withdraw({from: owner});
@@ -33,10 +33,10 @@ contract('TimeLockedWallet', (accounts) => {
         let futureTime = Math.floor((new Date).getTime() / 1000) + 50000;
 
         //create the contract
-        let timeLockedWallet = await TimeLockedWallet.new(creator, owner, futureTime);
+        let timeLockedWallet = await TimeLockedWallet.new(architect, owner, futureTime);
 
         //load the contract with some eth
-        await timeLockedWallet.send(ethToSend, {from: creator});
+        await timeLockedWallet.send(ethToSend, {from: architect});
         assert(ethToSend == await web3.eth.getBalance(timeLockedWallet.address));
         try {
             await timeLockedWallet.withdraw({from: owner})
@@ -44,7 +44,7 @@ contract('TimeLockedWallet', (accounts) => {
         } catch (error) {} //expected
 
         try {
-            await timeLockedWallet.withdraw({from: creator})
+            await timeLockedWallet.withdraw({from: architect})
             assert(false, "Expected error not received");
         } catch (error) {} //expected
 
@@ -57,20 +57,20 @@ contract('TimeLockedWallet', (accounts) => {
         assert(ethToSend == await web3.eth.getBalance(timeLockedWallet.address));
     });
 
-    it("Nobody other than the owner can withdraw funds after the unlock date", async () => {
+    it("Other then owner cannot withdraw funds after the unlock date", async () => {
         //set unlock date in unix epoch to now
         let now = Math.floor((new Date).getTime() / 1000);
 
         //create the contract
-        let timeLockedWallet = await TimeLockedWallet.new(creator, owner, now);
+        let timeLockedWallet = await TimeLockedWallet.new(architect, owner, now);
 
         //load the contract with some eth
-        await timeLockedWallet.send(ethToSend, {from: creator});
+        await timeLockedWallet.send(ethToSend, {from: architect});
         assert(ethToSend == await web3.eth.getBalance(timeLockedWallet.address));
         let balanceBefore = await web3.eth.getBalance(owner);
 
         try {
-          await timeLockedWallet.withdraw({from: creator})
+          await timeLockedWallet.withdraw({from: architect})
           assert(false, "Expected error not received");
         } catch (error) {} //expected
 
@@ -83,44 +83,21 @@ contract('TimeLockedWallet', (accounts) => {
         assert(ethToSend == await web3.eth.getBalance(timeLockedWallet.address));
     });
 
-    it("Owner can withdraw the ToptalToken after the unlock date", async () => {
-        //set unlock date in unix epoch to now
-        let now = Math.floor((new Date).getTime() / 1000);
-        //create the wallet contract 
-        let timeLockedWallet = await TimeLockedWallet.new(creator, owner, now);
-
-        //create ToptalToken contract
-        let toptalToken = await ToptalToken.new({from: creator});
-        //check contract initiated well and has 1M of tokens
-        assert(1000000000000 == await toptalToken.balanceOf(creator));        
-
-        //load the wallet with some Toptal tokens
-        let amountOfTokens = 1000000000;
-        await toptalToken.transfer(timeLockedWallet.address, amountOfTokens, {from: creator});
-        //check that timeLockedWallet has ToptalTokens
-        assert(amountOfTokens == await toptalToken.balanceOf(timeLockedWallet.address));
-        //now withdraw tokens
-        await timeLockedWallet.withdrawTokens(toptalToken.address, {from: owner});
-        //check the balance is correct
-        let balance = await toptalToken.balanceOf(owner);
-        assert(balance.toNumber() == amountOfTokens);
-    });
-
-    it("Allow getting info about the wallet", async () => {
+    it("Allow to get info about wallet", async () => {
         // Remember current time.
         let now = Math.floor((new Date).getTime() / 1000);
         // Set unlockDate to future time.
         let unlockDate = now + 100000;
         // Create new LockedWallet.
-        let timeLockedWallet = await TimeLockedWallet.new(creator, owner, unlockDate);
+        let timeLockedWallet = await TimeLockedWallet.new(architect, owner, unlockDate);
         // Send ether to the wallet.        
-        await timeLockedWallet.send(ethToSend, {from: creator});
+        await timeLockedWallet.send(ethToSend, {from: architect});
         
         // Get info about the wallet. 
         let info = await timeLockedWallet.info();
 
         // Compare result with expected values.
-        assert(info[0] == creator);
+        assert(info[0] == architect);
         assert(info[1] == owner);
         assert(info[2].toNumber() == unlockDate);
         assert(info[3].toNumber() == now);

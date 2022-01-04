@@ -1,8 +1,8 @@
 const TimeLockedWallet = artifacts.require("./TimeLockedWallet.sol");
 const TimeLockedWalletFactory = artifacts.require("./TimeLockedWalletFactory.sol");
 
-let ethToSend = web3.toWei(1, "ether");
-let someGas = web3.toWei(0.01, "ether");
+let ethToSend = web3.utils.toWei(String(1), "ether");
+let someGas = web3.utils.toWei(String(0.01), "ether");
 let timeLockedWalletFactory;
 let creator;
 let owner;

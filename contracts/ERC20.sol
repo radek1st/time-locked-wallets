@@ -1,4 +1,5 @@
-pragma solidity ^0.4.18;
+// pragma solidity ^0.4.18;
+pragma solidity  >0.4.23 <0.7.0;
 
 
 /**
