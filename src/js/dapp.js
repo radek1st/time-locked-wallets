@@ -10,8 +10,8 @@ DApp = {
     // set to true to use with local blockchain
     development: true,
     //Rinkeby:
-    factoryAddress: "0xe47684d658872fbde11c82036099a12c066c4fa3",
-    tokenAddress: "0x86b32525e687500ed4a665d1b16fef526cdd6f10",
+    factoryAddress: "0xaf5f98f101e86dca3d451bcdd9bbb46a13e855f9",
+    tokenAddress: "0x7f0c87a3b436df5c95b662d7706b67d586d81d55",
 
     init: function() {
         console.log("[x] Initializing DApp.");
@@ -26,10 +26,12 @@ DApp = {
     initWeb3: function() {
         // Is there is an injected web3 instance?
         if (typeof web3 !== 'undefined') {
-          DApp.web3Provider = web3.currentProvider;
+        //   DApp.web3Provider = web3.currentProvider;
+        // DApp.web3Provider = window.ethereum;       
+        DApp.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');     
         } else {
           // If no injected web3 instance is detected, fallback to the TestRPC
-          DApp.web3Provider = new Web3.providers.HttpProvider('http://localhost:9545');
+          DApp.web3Provider = new Web3.providers.HttpProvider('http://localhost:9545');          
         }
         web3 = new Web3(DApp.web3Provider);
         console.log("[x] web3 object initialized.");
@@ -80,7 +82,7 @@ DApp = {
                             DApp.initTable();
                             DApp.loadWallets();
                             DApp.initTopupWalletForm();
-                            DApp.initClaimForm();
+                            DApp.initClaimForm();                            
                         }
                     });
                 });
@@ -146,12 +148,14 @@ DApp = {
                 .then(function(factoryInstance){
                     var tx = {
                         from: DApp.currentAccount,
-                        value: web3.toWei(ethAmount, "ether")
-                    };
-                    return factoryInstance.newTimeLockedWallet(receiverAddress, unlockDate, tx);
+                        value: web3.utils.toWei(ethAmount, "ether")
+                    };                
+                    console.log(receiverAddress);
+                    return factoryInstance.newTimeLockedWallet(receiverAddress, unlockDate, tx);                    
                 })
-                .then(function(tx){
-                    var createdEvent = tx.logs[0].args;
+                .then(function(result){
+                    console.log(result);
+                    var createdEvent = result.logs[0].args;
                     var from        = createdEvent.from;
                     var to          = createdEvent.to;
                     var wallet      = createdEvent.wallet;
