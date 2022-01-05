@@ -28,7 +28,7 @@ DApp = {
         if (typeof web3 !== 'undefined') {
         //   DApp.web3Provider = web3.currentProvider;
         // DApp.web3Provider = window.ethereum;       
-        DApp.web3Provider = new Web3.providers.HttpProvider('http://localhost:9545');     
+        DApp.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');     
         } else {
           // If no injected web3 instance is detected, fallback to the TestRPC
           DApp.web3Provider = new Web3.providers.HttpProvider('http://localhost:9545');          
@@ -149,11 +149,13 @@ DApp = {
                     var tx = {
                         from: DApp.currentAccount,
                         value: web3.utils.toWei(ethAmount, "ether")
-                    };
-                    return factoryInstance.newTimeLockedWallet(receiverAddress, unlockDate, tx);
+                    };                
+                    console.log(receiverAddress);
+                    return factoryInstance.newTimeLockedWallet(receiverAddress, unlockDate, tx);                    
                 })
-                .then(function(tx){
-                    var createdEvent = tx.logs[0].args;
+                .then(function(result){
+                    console.log(result);
+                    var createdEvent = result.logs[0].args;
                     var from        = createdEvent.from;
                     var to          = createdEvent.to;
                     var wallet      = createdEvent.wallet;

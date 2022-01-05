@@ -33,11 +33,13 @@ contract TimeLockedWalletFactory {
         }
 
         // Send ether from this transaction to the created contract.
+        // payable(wallet).transfer(msg.value);
+        // wallet.transfer(msg.value);
         address payable w = address(uint160(wallet));
         w.transfer(msg.value);
 
         // Emit event.
-        emit Created(w, msg.sender, _owner, now, _unlockDate, msg.value);
+        emit Created(wallet, msg.sender, _owner, now, _unlockDate, msg.value);
     }
 
     // Prevents accidental sending of ether to the factory

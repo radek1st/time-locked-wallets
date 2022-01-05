@@ -1,7 +1,7 @@
 const TimeLockedWallet = artifacts.require("./TimeLockedWallet.sol");
 const ToptalToken = artifacts.require("./ToptalToken.sol");
 
-let ethToSend = web3.utils.toWei(String(0.1), "ether");
+let ethToSend = web3.utils.toWei(String(0.001), "ether");
 let someGas = web3.utils.toWei(String(0.01), "ether");
 let creator;
 let owner;
